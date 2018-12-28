@@ -1,0 +1,11 @@
+redis_service: redis-server
+postgresql_service: postgresql
+dependencies_package:
+  - python-setuptools
+  - python-dev
+  - libxslt1-dev
+  - gcc
+  - libxml2-dev
+  - libxslt-dev
+  - libyaml-dev
+  - libpq-dev

@@ -1,0 +1,37 @@
+---
+- name: Add user for sentry
+  user:
+    name: "{{ sentry_system_user }}"
+    state: present
+
+- name: Upgrade pip and setuptools of Sentry virtualenv 
+  pip:
+    name: ['pip','setuptools']
+    extra_args: "-U"
+    virtualenv: "{{ sentry_virtualenv_path }}"
+
+- name: "Install sentry version {{ sentry_version }} from requirement file"
+  pip:
+    requirements: "/tmp/requirement-{{ sentry_version }}.txt"
+    virtualenv: "{{ sentry_virtualenv_path }}"
+    virtualenv_python: "{{ python_version }}"
+    extra_args: "-U"
+    state: present
+  notify: reload sentry web service
+
+- name: Remove requirement files
+  file:
+    path: /tmp/requirement-"{{ sentry_version }}".txt
+    state: absent
+
+- name: Create sentry service files
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - {src: 'sentry-web.service.j2', dest: '/etc/systemd/system/sentry-web.service'}
+    - {src: 'sentry-worker.service.j2', dest: '/etc/systemd/system/sentry-worker.service'}
+    - {src: 'sentry-cron.service.j2', dest: '/etc/systemd/system/sentry-cron.service'}

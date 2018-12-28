@@ -1,0 +1,35 @@
+---
+- name: Make sure Redis is started
+  systemd:
+    name: "{{ redis_service }}"
+    state: started
+    enabled: yes
+  when: sentry_all_in_one == true
+
+- name: Make sure Postgresql is started
+  systemd:
+    name: "{{ postgresql_service }}"
+    state: started
+    enabled: yes
+  when: sentry_all_in_one == true
+
+- name: Make sure python-pip and python-virtualenv is installed
+  apt:
+    name: ['python-pip','python-virtualenv']
+    state: present
+    update_cache: yes
+ 
+- name: Install the dependecies
+  apt:
+    name: "{{ dependencies_package }}"
+    state: present
+    update_cache: yes
+
+- name: Copy requirement files of sentry-"{{ sentry_version }}"
+  copy:
+    src: "requirement-{{ sentry_version }}.txt"
+    dest: "/tmp/requirement-{{ sentry_version }}.txt"
+    mode: 0400 
+    owner: root
+    group: root
+    backup: yes

@@ -1,0 +1,60 @@
+---
+- name: Check for initial sentry
+  stat:
+    path: /etc/sentry
+  register: sentry_init_reg
+  tags:  
+    - sentry-config
+
+- name: Initial sentry
+  shell: "{{ sentry_virtualenv_path }}/bin/sentry init {{ sentry_config_path }}"
+  when: sentry_init_reg.stat.exists == false
+  tags:
+    - sentry-config
+
+- name: Configure redis for sentry
+  template:
+    src: "{{ sentry_host_redis_config_file_path }}"
+    dest: "{{ sentry_redis_config_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  when: sentry_redis_config_check_reg.stat.exists
+  register: sentry_redis_conf_reg
+  tags:
+    - sentry-config
+
+- name: Configure postgresql for sentry
+  template:
+    src: "{{ sentry_host_postgres_config_file_path }}"
+    dest: "{{ sentry_postgres_config_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  when: sentry_postgres_config_check_reg.stat.exists
+  register: sentry_postgres_conf_reg
+  tags:
+    - sentry-config
+
+- name: Initial sentry schema
+  shell: "SENTRY_CONF={{ sentry_config_path }} {{ sentry_virtualenv_path }}/bin/sentry upgrade --noinput"
+  when: sentry_redis_conf_reg.changed == true or sentry_postgres_conf_reg.changed == true
+  register: sentry_init_schema_reg
+  notify:
+    - reload sentry web service
+    - reload sentry worker service
+    - reload sentry cron service
+  tags:
+    - sentry-config
+
+- name: Create Superuser on Sentry
+  shell: "SENTRY_CONF={{ sentry_config_path }} {{ sentry_virtualenv_path }}/bin/sentry createuser --email {{ sentry_user.email }} --password {{ sentry_user.password }} --superuser --no-input"
+  when: sentry_init_schema_reg is succeeded and sentry_postgres_conf_reg.changed == true
+  ignore_errors: yes
+  register: create_user_reg
+  notify:
+    - reload sentry web service
+    - reload sentry worker service
+    - reload sentry cron service

@@ -1,0 +1,13 @@
+---
+# tasks file for ansible-sentry
+- name: Include OS vars
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- include_tasks: sentry_pre.yml
+- include_tasks: sentry_install.yml
+
+- block: # Config Sentry
+    - include_tasks: sentry_search_config.yml
+    - include_tasks: sentry_post.yml
+  tags:
+    - sentry-config

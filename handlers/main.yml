@@ -1,0 +1,19 @@
+---
+# handlers file for ansible-sentry
+- name: reload sentry web service
+  systemd:
+    name: sentry-web
+    state: restarted
+    enabled: yes
+
+- name: reload sentry worker service
+  systemd:
+    name: sentry-worker
+    state: restarted
+    enabled: yes
+
+- name: reload sentry cron service
+  systemd:
+    name: sentry-cron
+    state: restarted
+    enabled: yes

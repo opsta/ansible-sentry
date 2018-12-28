@@ -1,0 +1,53 @@
+---
+- block: # Search Config Path
+  - name: Set list of path to look for local Sentry configuration directory
+    set_fact:
+      sentry_search_config_paths: "{{ sentry_search_config_paths }} + [ '{{ sentry_search_config_path }}' ]"
+    with_items: "{{ group_names }}"
+
+  - name: Check if Sentry configuration directory exists
+    delegate_to: localhost
+    become: false
+    stat:
+      path: "{{ item }}"
+    register: sentry_config_check_reg
+    with_first_found:
+      - files: "{{ sentry_search_config_paths }}"
+        skip: true
+
+- block: # Search Redis Config
+  - name: Set Sentry configuration directory to Redis
+    set_fact:
+      sentry_host_redis_config_path: "{{ sentry_config_check_reg.results[0].stat.path }}"
+    when:
+      - sentry_config_check_reg.results[0] is defined
+      - sentry_config_check_reg.results[0].stat is defined
+      - sentry_config_check_reg.results[0].stat.isdir
+
+  - name: Check if Sentry(Redis) template configuration file is exists
+    delegate_to: localhost
+    become: false
+    stat:
+      path: "{{ sentry_host_redis_config_file_path }}"
+    register: sentry_redis_config_check_reg
+  tags:
+    - sentry-config
+
+  
+- block: # Search Postgresql Config
+  - name: Set Sentry configuration directory to Postgresql
+    set_fact:
+      sentry_host_postgres_config_path: "{{ sentry_config_check_reg.results[0].stat.path }}"
+    when:
+      - sentry_config_check_reg.results[0] is defined
+      - sentry_config_check_reg.results[0].stat is defined
+      - sentry_config_check_reg.results[0].stat.isdir
+
+  - name: Check if Sentry(Redis) template configuration file is exists
+    delegate_to: localhost
+    become: false
+    stat:
+      path: "{{ sentry_host_postgres_config_file_path }}"
+    register: sentry_postgres_config_check_reg
+  tags:
+    - sentry-config
