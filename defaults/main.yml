@@ -19,6 +19,10 @@ sentry_version: 9.0.0
 sentry_virtualenv_path: /usr/local/sentry
 python_version: python2.7
 
+sentry_user:
+  email: example@example.local
+  password: password
+
 #variable use in template of config
 # sentry_configuration:
 #   db_host: sentry.db.postgres
