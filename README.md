@@ -12,6 +12,7 @@ Requirements
 Role Variables
 --------------
 
+```yml
 sentry_search_config_path:  "{{ playbook_dir }}/files/groups/{{ item }}/sentry"
 
 sentry_host_redis_config_file_path: "{{ sentry_host_redis_config_path | default(inventory_hostname) }}/config.yml.j2"
@@ -27,6 +28,8 @@ sentry_version: support 2 verion (8.22.0, 9.0.0)
 sentry_virtualenv_path: path for store virtualenv of sentry
 python_version: python2.7
 
+sentry_user: superuser for login sentry web
+
 this example of configure file on files directory
 variable use in template of config
  sentry_configuration:
@@ -38,6 +41,7 @@ variable use in template of config
    db_name: sentry
    redis_host: 127.0.0.1
    redis_port: 6379
+```
 
 Dependencies
 ------------
