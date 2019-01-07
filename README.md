@@ -1,38 +1,66 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+playbook for install sentry 8.22.0 and 9.0.0
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Postgresql
+- Redis
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+sentry_search_config_path:  "{{ playbook_dir }}/files/groups/{{ item }}/sentry"
+
+sentry_host_redis_config_file_path: "{{ sentry_host_redis_config_path | default(inventory_hostname) }}/config.yml.j2"
+sentry_host_postgres_config_file_path: "{{ sentry_host_postgres_config_path | default(inventory_hostname) }}/sentry.conf.py.j2"
+
+sentry_redis_config_file_path: /etc/sentry/config.yml
+sentry_postgres_config_file_path: /etc/sentry/sentry.conf.py
+sentry_config_path: /etc/sentry
+
+sentry_system_user: that user for run sentry
+sentry_version: support 2 verion (8.22.0, 9.0.0)
+
+sentry_virtualenv_path: path for store virtualenv of sentry
+python_version: python2.7
+
+this example of configure file on files directory
+variable use in template of config
+ sentry_configuration:
+   db_host: sentry.db.postgres
+   db_host: 127.0.0.1
+   db_port: 5432
+   db_user: sentry
+   db_password: CHANGEME
+   db_name: sentry
+   redis_host: 127.0.0.1
+   redis_port: 6379
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yml
+- hosts: all
+  gather_facts: yes
+  become: true
+  roles:
+    - { role: opsta.redis, when: sentry_all_in_one | default(false) }
+    - { role: opsta.postgresql, when: sentry_all_in_one | default(false) }
+    - opsta.sentry
+```
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Opsta Thailand
