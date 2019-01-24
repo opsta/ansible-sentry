@@ -15,9 +15,9 @@ sentry_version: 9.0.0
 #support 2 verion
 # - 8.22.0
 # - 9.0.0
-settry_system_secret_key: CHANGEME
+sentry_system_secret_key: CHANGEME
 
-sentry_virtualenv_path: /usr/local/sentry
+sentry_virtualenv_path: /opt/sentry
 sentry_python_version: python2.7
 
 sentry_admin:
