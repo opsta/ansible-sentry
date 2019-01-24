@@ -38,16 +38,6 @@
   tags:
     - sentry-config
 
-- name: Regenerate secret key
-  shell: "SENTRY_CONF={{ sentry_config_path }} {{ sentry_virtualenv_path }}/bin/sentry config generate-secret-key"
-  when: sentry_redis_conf_reg.changed == true or sentry_postgres_conf_reg.changed == true
-  notify:
-    - reload sentry web service
-    - reload sentry worker service
-    - reload sentry cron service
-  tags:
-    - sentry-config
-
 - name: Initial sentry schema
   shell: "SENTRY_CONF={{ sentry_config_path }} {{ sentry_virtualenv_path }}/bin/sentry upgrade --noinput"
   when: sentry_redis_conf_reg.changed == true or sentry_postgres_conf_reg.changed == true

@@ -14,7 +14,7 @@
   pip:
     requirements: "/tmp/requirement-{{ sentry_version }}.txt"
     virtualenv: "{{ sentry_virtualenv_path }}"
-    virtualenv_python: "{{ python_version }}"
+    virtualenv_python: "{{ sentry_virtualenv_python_version }}"
     extra_args: "-U"
     state: present
   notify: reload sentry web service

@@ -2,17 +2,15 @@ galaxy_info:
   author: Anurak Jannawan
   description: your description
   company: Opsta Thailand
-
   license: MIT
-
   min_ansible_version: 2.4
-
   platforms:
     - name: Debian
+      version:
+      - 8
+      - 9
     - name: Ubuntu
       version:
       - 16.04
-
   galaxy_tags: []
-
 dependencies: []
