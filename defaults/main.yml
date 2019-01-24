@@ -18,7 +18,7 @@ sentry_version: 9.0.0
 settry_system_secret: system_secret
 
 sentry_virtualenv_path: /usr/local/sentry
-python_version: python2.7
+sentry_python_version: python2.7
 
 sentry_admin:
   email: example@example.local
