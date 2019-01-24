@@ -26,9 +26,10 @@ sentry_system_user: that user for run sentry
 sentry_version: support 2 verion (8.22.0, 9.0.0)
 
 sentry_virtualenv_path: path for store virtualenv of sentry
-python_version: python2.7
+sentry_system_secret_key: use for sentry system.secret
+sentry_virtualevn_python_version: python2.7
 
-sentry_user: superuser for login sentry web
+sentry_admin: superuser for login sentry web
 
 this example of configure file on files directory
 variable use in template of config
