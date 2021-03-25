@@ -67,7 +67,7 @@ python-openid==2.2.5
 python-u2flib-server==4.0.1
 python-utils==2.3.0
 pytz==2018.7
-PyYAML==3.11
+PyYAML==5.4
 qrcode==5.3
 querystring-parser==1.2.3
 raven==6.4.0
