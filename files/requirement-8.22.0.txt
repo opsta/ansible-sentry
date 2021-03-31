@@ -33,7 +33,7 @@ ipaddress==1.0.22
 jmespath==0.9.3
 kombu==3.0.35
 loremipsum==1.0.5
-lxml==4.2.5
+lxml==4.6.3
 milksnake==0.1.5
 mmh3==2.3.1
 mock==1.0.1
