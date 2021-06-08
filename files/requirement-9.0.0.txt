@@ -49,7 +49,7 @@ parsimonious==0.8.0
 pbr==5.1.1
 percy==2.0.1
 petname==2.0
-Pillow==4.2.1
+Pillow==8.2.0
 pkg-resources==0.0.0
 pluggy==0.6.0
 progressbar2==3.10.1
