@@ -56,7 +56,7 @@ progressbar2==3.10.1
 psycopg2==2.7.6.1
 py==1.7.0
 pycparser==2.19
-PyJWT==1.5.3
+PyJWT==2.4.0
 pyOpenSSL==18.0.0
 pytest==3.5.1
 pytest-django==2.9.1
